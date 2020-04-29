@@ -19,7 +19,6 @@ public class Solitario {
 
     private static void mostrarMenuInicio() {
         System.out.println("[*] Bienvenid@ al juego del Solitario [*]\n[1] Comenzar partida\n[0] Salir");
-        System.out.println("");
     }
 
     private static Jugador crearJugador() {
@@ -58,42 +57,19 @@ public class Solitario {
         return opcion;
     }
     
+    private static int mostrarDerrota(){
+        int opcion;
+        System.out.println("[+]¡Lo siento, has perdido!");
+        do{
+        opcion = ES.pideNumero("[?] ¿Quieres jugar de nuevo?\n| 1)Si\n| 0)No\n");
+        }while(opcion!=1 && opcion!=0);
+        return opcion;
+    }
+    
     private static void salir() {
         System.out.println("[*] Gracias por jugar al Solitario, esperamos verte pronto [*]");
         System.exit(0);
     }
-    
-    
-    //Selecciona una posición del monton interior.
-    private static int[] seleccionarPosicion() {
-        int[] posicion = {-1, -1};
-        do {
-            posicion[0] = ES.pideNumero("[*]Selecciona la fila deseada [0-3]: ");
-        } while (posicion[0] < 0 || posicion[0] > 3);
-        do {
-            posicion[1] = ES.pideNumero("[*]Selecciona la columna deseada [0-3]: ");
-        } while (posicion[1] < 0 || posicion[1] > 3);
-        return posicion;
-
-    }
-
-    //Selecciona la carta que vamos a mover.
-    public static int[] seleccionarCarta() {
-        if (true) {
-            
-        }
-        System.out.println("[?] Qué carta quieres mover del montón interior?");
-        return seleccionarPosicion();
-
-    }
-
-    //Selecciona el destino de la carta seleccionada.
-    public static int[] seleccionarDestino() {
-        System.out.println("[?] Indica la posición de destino de tu carta");
-        return seleccionarPosicion();
-    }
-    
-  
     
     private static void jugar(){
         int opcion;
@@ -104,18 +80,18 @@ public class Solitario {
             } while (opcion < 0 || opcion > 2);
             switch(opcion){
                 case 1: 
-                    int[] posicion = seleccionarCarta();
+                    int[] posicion = jugador.seleccionarCarta();
                     try{
-                    mesa.moverCartaExterior(posicion[0], posicion[1]);
+                    jugador.moverCartaExterior(posicion[0], posicion[1]);
                     }catch(Exception err){System.out.print("[!] ");
                         System.out.println(err.getMessage());
                     }
                     break;
                 case 2: 
-                    int[] posOri = seleccionarCarta();
-                    int[] posDest = seleccionarDestino();
+                    int[] posOri = jugador.seleccionarCarta();
+                    int[] posDest = jugador.seleccionarDestino();
                     try{
-                    mesa.moverCartaInterior(posOri[0], posOri[1],posDest[0], posDest[1]);
+                    jugador.moverCartaInterior(posOri[0], posOri[1],posDest[0], posDest[1]);
                     }catch(Exception err){System.out.print("[!] ");
                         System.out.println(err.getMessage());
                     }
@@ -153,7 +129,9 @@ public class Solitario {
         }
 
         //Jugar
-        jugar();
+        //do{
+            jugar();
+        //}while(movimientosPosibles());
         opcion= mostrarVictoria();
         }while(opcion!=0);
         salir();

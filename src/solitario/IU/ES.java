@@ -19,13 +19,12 @@ public class ES {
 
     }
     
-    public static void Cadena(String mensaje) {
+    
+     public static void Cadena(String mensaje) {
         // Poner el mensaje
         System.out.print(mensaje);
 
     }
-    
-    
 
     public static int pideNumero(String mensaje) { // Correccion error si no se introduce un int 
         int numero = -1;

@@ -8,8 +8,10 @@
 * - Un array de Pilas para representar los montones exteriores.
 * Funcionalidad: colocar las cartas para iniciar el juego, quitar una carta de la parte interior, colocar una carta en el interior,
 * colocar una carta en el montón exterior correspondiente, visualizar cartas en la mesa, etc
+
 La Pila es una estructura de datos que existe en Java y que se corresponde con la clase Stack. Por lo tanto debereis hacer uso de dicha
 clase para representar la mesa de juego, y en particular de los métodos que se indican a continuación (de ser necesarios):
+
         public boolean empty();
         // Produce: Si la pila está vacía devuelve true, sino false.
         public Carta peek();
@@ -27,8 +29,8 @@ import solitario.IU.ES;
 
 public class Mesa {
 
-     public static Stack<Carta>[] montonExterior; // 4 montones ( los 4 palos) 
-     public static Stack<Carta>[][] montonInterior;  // Una matriz
+    public static Stack<Carta>[] montonExterior; // 4 montones ( los 4 palos) 
+    public static Stack<Carta>[][] montonInterior;  // Una matriz
 
     public Mesa() {
         //Inicializa el monton exterior
@@ -74,96 +76,15 @@ public class Mesa {
         }
     }
 
-    //Mueve una carta de un stack a otro del monton interior
-    //La carta que se oculta en el stack destino tiene que ser 1 unidad > y del mismo palo que la que se mueve
-    //Encima de un 10 tiene que colocarse un 7
-    //No se puede mover una carta a un stack vacío
-    public void moverCartaInterior(int filaOri, int colOri, int filaDest, int colDest) throws Exception {
-        //Comprobar si el montón desde donde se quiere mover la carta está vacío
-        if (montonInterior[filaOri][colOri].empty()) {
-            throw new Exception("Movimiento inválido : No se pueden mover cartas desde un espacio vacío");
-        }
 
-        //Comprobar si el montón al que se quiere mover la carta está vacío
-        if (montonInterior[filaDest][colDest].empty()) {
-            throw new Exception("Movimiento inválido : No se pueden mover cartas a espacios vacíos");
-        }
-
-        //Una vez listas las comprobaciones previas vemos que cartas queremos coger
-        Carta cartaOri = montonInterior[filaOri][colOri].peek();
-
-        //Vemos sobre que carta queremos ponerla
-        Carta cartaDest = montonInterior[filaDest][colDest].peek();
-
-        //Comprobar que la carta que hemos cogido y la carta sobre la cual vamos a poner sean del mismo palo
-        if (!cartaOri.getPalo().equals(cartaDest.getPalo())) {
-            throw new Exception("Movimiento inválido : No se pueden juntar cartas de distintos palos");
-        }
-
-        //Comprobar que el número de la carta origen sea menor que la del destino
-        //Encima del 12 no se puede poner nada
-        if (cartaOri.getNumero() == 12
-                || (cartaOri.getNumero() == 7 && cartaDest.getNumero() != 10)
-                || (cartaOri.getNumero() != 7 && cartaOri.getNumero() != cartaDest.getNumero() - 1)) {
-            throw new Exception("Movimiento inválido : La carta de destino no es una unidad mayor que la de origen");
-        }
-
-        // Una vez listas las comprobaciones podremos mover la carta
-        montonInterior[filaDest][colDest].push(montonInterior[filaOri][colOri].pop()); // Movemos a la posicion de destino la carta situada en posicion origen
-
-       
-    }
-
-    //Colocar carta en un monton exterior
-    //Se saca una carta de un stack del monton interior y se mete en el stack del 
-    //palo correpondiente en el monton exterior
-    //La carta que se pone en el monton exterior tiene que ser mayor que la carta que queda oculta
-    //Si la carta que se oculta es un 7, la carta que se coloca encima tiene que ser un 10
-    //Solo se puede colocar un AS(1) como primera carta en un stack exterior vacío
-    public void moverCartaExterior(int filaOri, int colOri) throws Exception {
-
-        //Comprobar si el montón desde donde se quiere mover la carta está vacío
-        if (montonInterior[filaOri][colOri].empty()) {
-            throw new Exception("Movimiento inválido : No se pueden mover cartas desde un espacio vacío");
-        }
-
-        //Vemos que carta vamos a mover al montón Exterior
-        Carta cartaOri = montonInterior[filaOri][colOri].peek();
-
-        //Miramos el palo de la carta que acabamos de coger y le asignamos el montón del mismo Palo
-        int montonDest = cartaOri.getPalo().ordinal();
-
-        //Comprobación de que la primera carta escogida para mover sea un AS
-        if (montonExterior[montonDest].empty()){
-            if(cartaOri.getNumero() != 1){
-                throw new Exception("Movimiento inválido : Si un montón de un palo está vacío la primera carta a poner debe ser un as");
-            }
-        }else{
-
-        //Vemos que carta vamos a solapar
-        Carta cartaDest = montonExterior[montonDest].peek();
-
-        //Comprobar cartaOri sea una unidad mayor sobre la carta a solapar.
-        if ((cartaOri.getNumero() == 10 && cartaDest.getNumero() != 7)
-                || (cartaOri.getNumero() != 10 && cartaOri.getNumero() - 1 != cartaDest.getNumero()) ){
-            throw new Exception("Movimiento inválido :La carta de destino no es una unidad menor que la de origen");
-        }
-        }
-        //Una vez listas las comprobaciones movemos la carta al montón exterior
-        montonExterior[montonDest].push(montonInterior[filaOri][colOri].pop());
-
-    
-    }
 
     //Muestra por pantalla las cartas que hay visibles en la mesa
     public void mostrarMesa() {
-        
         // Creamos una representación para carta inexistente
         String cartaInexistente = "[--|-]";
 
         // Mostramos la última carta de los montones exteriores     
         ES.Cadena("Montón Exterior:\n");
-        
         for (Stack<Carta> monton : montonExterior) {// Recorremos los palos
             if (monton.empty()) { // Si un montón está vacio , se muestra representación por defecto carta inexistente
                 System.out.print(cartaInexistente);
@@ -173,24 +94,17 @@ public class Mesa {
             System.out.print(" "); // Separacion horizontal
         }
 
-        // Mostramos la última carta de los montones interiores    
+        // Mostramos la última carta de los montones exteriores     
         ES.Cadena("\n\nMontón Interior:\n");
-        
-        ES.Cadena("   0\t" + "  1\t"  + " 2\t" + "3\t\n");
-     
         for (Stack[] posicion : montonInterior) {// Recorremos posiciones de montón Interior
-   
             for (Stack<Carta> monton : posicion) { // Accedemos a las cartas de cada posición
-                
                 if (monton.empty()) {
                     System.out.print(cartaInexistente);
                 } else {
-                  
                     System.out.print(monton.peek().toString()); // Mostramos la representación de la carta (clase carta método toString)
                 }
                 System.out.print(" "); // Separacion horizontal
             }
-            
             System.out.println(); // Separación vertical
         }
     }
@@ -209,7 +123,5 @@ public class Mesa {
     
     
     
-    
-    
-    
+
 }

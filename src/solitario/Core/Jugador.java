@@ -5,7 +5,6 @@
  */
 package solitario.Core;
 
-import java.util.Stack;
 import solitario.IU.ES;
 
 public class Jugador {
@@ -25,11 +24,10 @@ public class Jugador {
         this.nombre = nombre;
     }
 
-    //Selecciona una posición del monton interior.
-    private static int[] seleccionarPosicion() {
+    private int[] seleccionarPosicion() {
         int[] posicion = {-1, -1};
         do {
-            posicion[0] = ES.pideNumero("[*]Selecciona la fila deseada [0-3]: ");
+            posicion[0] = ES.pideNumero("[*]Selecciona la fila deseada [0-3]: "); 
         } while (posicion[0] < 0 || posicion[0] > 3);
         do {
             posicion[1] = ES.pideNumero("[*]Selecciona la columna deseada [0-3]: ");
@@ -37,28 +35,19 @@ public class Jugador {
         return posicion;
 
     }
-
-    //Selecciona la carta que vamos a mover.
-    public static int[] seleccionarCarta() {
-        if (true) {
-
-        }
+    
+       public int[] seleccionarCarta() {
         System.out.println("[?] Qué carta quieres mover del montón interior?");
         return seleccionarPosicion();
 
     }
 
-    //Selecciona el destino de la carta seleccionada.
-    public static int[] seleccionarDestino() {
+    public int[] seleccionarDestino() {
         System.out.println("[?] Indica la posición de destino de tu carta");
         return seleccionarPosicion();
     }
-
-    //Mueve una carta de un stack a otro del monton interior
-    //La carta que se oculta en el stack destino tiene que ser 1 unidad > y del mismo palo que la que se mueve
-    //Encima de un 10 tiene que colocarse un 7
-    //No se puede mover una carta a un stack vacío
-    public void moverCartaInterior(int filaOri, int colOri, int filaDest, int colDest) throws Exception {
+    
+        public void moverCartaInterior(int filaOri, int colOri, int filaDest, int colDest) throws Exception {
         //Comprobar si el montón desde donde se quiere mover la carta está vacío
         if (Mesa.montonInterior[filaOri][colOri].empty()) {
             throw new Exception("Movimiento inválido : No se pueden mover cartas desde un espacio vacío");
@@ -91,6 +80,30 @@ public class Jugador {
         // Una vez listas las comprobaciones podremos mover la carta
         Mesa.montonInterior[filaDest][colDest].push(Mesa.montonInterior[filaOri][colOri].pop()); // Movemos a la posicion de destino la carta situada en posicion origen
 
+        /*if (!montonInterior[filaDest][colDest].empty()) {  
+            //Mientras el nº de la carta origen sea MENOR que el nº de la carta que se oculta
+            while (montonInterior[filaOri][colOri].peek().getNumero() < montonInterior[filaDest][colDest].peek().getNumero()) { ES UN BUCLE INFINITO QUE BLOQUEA EL PROGRAMA SI SE MUEVE CARTA ORIGEN>DESTINO
+
+                //Si se oculta un 10 pero la carta de encima es distinta de 7...
+                if (montonInterior[filaOri][colOri].peek().getNumero() != 7
+                        && montonInterior[filaDest][colDest].peek().getNumero() == 10) {
+                    System.out.println("Movimiento inválido!");
+                } else {
+                    //Se pone en el stack destino la carta que sacamos del stack origen
+                    montonInterior[filaDest][colDest].push(montonInterior[filaOri][colOri].pop());
+                }
+            }
+        } else {
+            System.out.println("Movimiento inválido!");
+        }
+    
+        ERRORES :
+        -NO SE COMPRUEBA SI COGES DE UNA POSICIÓN VACÍA
+        -NO SE COMPRUEBA SI LA CARTA ORIGEN Y DESTINO SON DEL MISMO PALO
+        -SI LA CARTA ORIGEN ES MENOR EN MAS DE UNA UNIDAD QUE LA CARTA DESTINO SE EJECUTA UN BUCLE IFNINITO QUE MUEVE TODO EL STACK
+        -SI LA CARTA ORIGEN ES MAYOR O IGUAL QUE LA CARTA DESTINO NO HACE NADA NI MUESTRA MENSAJE
+        -NO SE COMPRUEBA SI LA CARTA ORIGEN ES UNA UNIDAD MENOR QUE LA CARTA DESTINO
+         */
     }
 
     //Colocar carta en un monton exterior
@@ -113,23 +126,53 @@ public class Jugador {
         int montonDest = cartaOri.getPalo().ordinal();
 
         //Comprobación de que la primera carta escogida para mover sea un AS
-        if (Mesa.montonExterior[montonDest].empty()) {
-            if (cartaOri.getNumero() != 1) {
+        if (Mesa.montonExterior[montonDest].empty()){
+            if(cartaOri.getNumero() != 1){
                 throw new Exception("Movimiento inválido : Si un montón de un palo está vacío la primera carta a poner debe ser un as");
             }
-        } else {
+        }else{
 
-            //Vemos que carta vamos a solapar
-            Carta cartaDest = Mesa.montonExterior[montonDest].peek();
+        //Vemos que carta vamos a solapar
+        Carta cartaDest = Mesa.montonExterior[montonDest].peek();
 
-            //Comprobar cartaOri sea una unidad mayor sobre la carta a solapar.
-            if ((cartaOri.getNumero() == 10 && cartaDest.getNumero() != 7)
-                    || (cartaOri.getNumero() != 10 && cartaOri.getNumero() - 1 != cartaDest.getNumero())) {
-                throw new Exception("Movimiento inválido :La carta de destino no es una unidad menor que la de origen");
-            }
+        //Comprobar cartaOri sea una unidad mayor sobre la carta a solapar.
+        if ((cartaOri.getNumero() == 10 && cartaDest.getNumero() != 7)
+                || (cartaOri.getNumero() != 10 && cartaOri.getNumero() - 1 != cartaDest.getNumero()) ){
+            throw new Exception("Movimiento inválido :La carta de destino no es una unidad menor que la de origen");
+        }
         }
         //Una vez listas las comprobaciones movemos la carta al montón exterior
         Mesa.montonExterior[montonDest].push(Mesa.montonInterior[filaOri][colOri].pop());
 
+        /*//Si el monton exterior esta vacío
+        if (montonExterior[montonDest].empty()) {
+            //Solo puede ponerse un AS
+            if (montonInterior[filaOri][colOri].peek().getNumero() == 1) {
+                //Se hace el movimiento del AS
+                montonExterior[montonDest].push(montonInterior[filaOri][colOri].pop());
+            } else { //Si no es un AS
+                System.out.println("Movimiento inválido!");
+            }
+        } else { //Si hay elementos en el monton exterior
+            //Mientras la carta que se coloca sea mayor que la carta que se oculta
+            while (montonInterior[filaOri][colOri].peek().getNumero() > montonExterior[montonDest].peek().getNumero()) {
+                //Si la carta que se coloca encima del 7 es distinta de 10
+                if (montonExterior[montonDest].peek().getNumero() == 7 && montonInterior[filaOri][colOri].peek().getNumero() != 10) {
+                    System.out.println("Movimiento inválido!");
+                } else { //Cualquier otro caso es correcto y se realiza el movimiento
+                    montonExterior[montonDest].push(montonInterior[filaOri][colOri].pop());
+                }
+            }
+        }
+        ERRORES :
+        - NO SE COMPRUEBA SI EL MONTÓN INTERIOR ESTÁ VACÍO
+        - NO SE COMPRUEBA QUE SEAN DEL MISMO PALO
+        - BUCLE INFINITO SI LA CARTA ORIGEN ES MAYOR QUE LA DE DESTINO , QUE MUEVE TODO UN STACK HACIA FUERA O MUESTRA DE FORMA INDEFINIDA EL MENSAJE "MOVIMIENTO INVÁLIDO"
+        - NO SE COMPRUEBA QUE LA CARTA ORIGEN SEA UNA UNIDAD MAYOR QUE LA CARTA DESTINO
+        - SI LA CARTA ORIGEN ES MENOR O IGUAL A LA DE DESTINO, NO HACE NADA NI MUESTRA NINGÚN MENSAJE
+         */
     }
+    
 }
+
+   
