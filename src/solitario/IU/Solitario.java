@@ -27,8 +27,8 @@ public class Solitario {
         do {
             nombre = ES.pideCadena("[?] Introduce tu nombre para comenzar a jugar: ");
         } while (nombre.trim().equals("")); // Comprueba que el nombre no esté vacío
-        System.out.print("[+]Registrando al jugador ");
-        System.out.println(nombre);
+        //System.out.print("[+]Registrando al jugador ");
+       // System.out.println(nombre);
         return new Jugador(nombre);
     }
 
