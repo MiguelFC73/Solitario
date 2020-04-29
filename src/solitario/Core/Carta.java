@@ -7,13 +7,11 @@ public class Carta {
 
     private final int numero; // Final para quitar warnings (No se modifican los valores en ningún momento)
     private final Palos palo;
-    private int ejeX;
-    private final boolean posicion;
 
     public Carta(int numero, Palos palo) {
         this.numero = numero;
         this.palo = palo;
-        posicion=true;
+     
     }
 
     public int getNumero() {
@@ -24,14 +22,6 @@ public class Carta {
         return this.palo;
     }
 
-    public int getEjeX() {
-        return ejeX;
-    }
-
-    public boolean isPosicion() {
-        return posicion;
-    }
-    
 
     @Override //toString() es un método que se está reescribiendo 
     public String toString() {
