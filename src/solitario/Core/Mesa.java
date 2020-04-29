@@ -111,29 +111,7 @@ public class Mesa {
         // Una vez listas las comprobaciones podremos mover la carta
         montonInterior[filaDest][colDest].push(montonInterior[filaOri][colOri].pop()); // Movemos a la posicion de destino la carta situada en posicion origen
 
-        /*if (!montonInterior[filaDest][colDest].empty()) {  
-            //Mientras el nº de la carta origen sea MENOR que el nº de la carta que se oculta
-            while (montonInterior[filaOri][colOri].peek().getNumero() < montonInterior[filaDest][colDest].peek().getNumero()) { ES UN BUCLE INFINITO QUE BLOQUEA EL PROGRAMA SI SE MUEVE CARTA ORIGEN>DESTINO
-                //Si se oculta un 10 pero la carta de encima es distinta de 7...
-                if (montonInterior[filaOri][colOri].peek().getNumero() != 7
-                        && montonInterior[filaDest][colDest].peek().getNumero() == 10) {
-                    System.out.println("Movimiento inválido!");
-                } else {
-                    //Se pone en el stack destino la carta que sacamos del stack origen
-                    montonInterior[filaDest][colDest].push(montonInterior[filaOri][colOri].pop());
-                }
-            }
-        } else {
-            System.out.println("Movimiento inválido!");
-        }
-    
-        ERRORES :
-        -NO SE COMPRUEBA SI COGES DE UNA POSICIÓN VACÍA
-        -NO SE COMPRUEBA SI LA CARTA ORIGEN Y DESTINO SON DEL MISMO PALO
-        -SI LA CARTA ORIGEN ES MENOR EN MAS DE UNA UNIDAD QUE LA CARTA DESTINO SE EJECUTA UN BUCLE IFNINITO QUE MUEVE TODO EL STACK
-        -SI LA CARTA ORIGEN ES MAYOR O IGUAL QUE LA CARTA DESTINO NO HACE NADA NI MUESTRA MENSAJE
-        -NO SE COMPRUEBA SI LA CARTA ORIGEN ES UNA UNIDAD MENOR QUE LA CARTA DESTINO
-         */
+       
     }
 
     //Colocar carta en un monton exterior
@@ -174,33 +152,7 @@ public class Mesa {
         //Una vez listas las comprobaciones movemos la carta al montón exterior
         montonExterior[montonDest].push(montonInterior[filaOri][colOri].pop());
 
-        /*//Si el monton exterior esta vacío
-        if (montonExterior[montonDest].empty()) {
-            //Solo puede ponerse un AS
-            if (montonInterior[filaOri][colOri].peek().getNumero() == 1) {
-                //Se hace el movimiento del AS
-                montonExterior[montonDest].push(montonInterior[filaOri][colOri].pop());
-            } else { //Si no es un AS
-                System.out.println("Movimiento inválido!");
-            }
-        } else { //Si hay elementos en el monton exterior
-            //Mientras la carta que se coloca sea mayor que la carta que se oculta
-            while (montonInterior[filaOri][colOri].peek().getNumero() > montonExterior[montonDest].peek().getNumero()) {
-                //Si la carta que se coloca encima del 7 es distinta de 10
-                if (montonExterior[montonDest].peek().getNumero() == 7 && montonInterior[filaOri][colOri].peek().getNumero() != 10) {
-                    System.out.println("Movimiento inválido!");
-                } else { //Cualquier otro caso es correcto y se realiza el movimiento
-                    montonExterior[montonDest].push(montonInterior[filaOri][colOri].pop());
-                }
-            }
-        }
-        ERRORES :
-        - NO SE COMPRUEBA SI EL MONTÓN INTERIOR ESTÁ VACÍO
-        - NO SE COMPRUEBA QUE SEAN DEL MISMO PALO
-        - BUCLE INFINITO SI LA CARTA ORIGEN ES MAYOR QUE LA DE DESTINO , QUE MUEVE TODO UN STACK HACIA FUERA O MUESTRA DE FORMA INDEFINIDA EL MENSAJE "MOVIMIENTO INVÁLIDO"
-        - NO SE COMPRUEBA QUE LA CARTA ORIGEN SEA UNA UNIDAD MAYOR QUE LA CARTA DESTINO
-        - SI LA CARTA ORIGEN ES MENOR O IGUAL A LA DE DESTINO, NO HACE NADA NI MUESTRA NINGÚN MENSAJE
-         */
+    
     }
 
     //Muestra por pantalla las cartas que hay visibles en la mesa
