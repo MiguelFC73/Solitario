@@ -22,6 +22,7 @@ clase para representar la mesa de juego, y en particular de los métodos que se 
 package solitario.Core;
 
 import java.util.Stack;
+import solitario.IU.ES;
 
 
 public class Mesa {
@@ -204,11 +205,13 @@ public class Mesa {
 
     //Muestra por pantalla las cartas que hay visibles en la mesa
     public void mostrarMesa() {
+        
         // Creamos una representación para carta inexistente
         String cartaInexistente = "[--|-]";
 
         // Mostramos la última carta de los montones exteriores     
-        System.out.println("Montón Exterior:\n");
+        ES.Cadena("Montón Exterior:\n");
+        
         for (Stack<Carta> monton : montonExterior) {// Recorremos los palos
             if (monton.empty()) { // Si un montón está vacio , se muestra representación por defecto carta inexistente
                 System.out.print(cartaInexistente);
@@ -219,9 +222,9 @@ public class Mesa {
         }
 
         // Mostramos la última carta de los montones interiores    
-        System.out.println("\n\nMontón Interior:\n");
+        ES.Cadena("\n\nMontón Interior:\n");
         
-        System.out.println("   0\t" + "  1\t"  + " 2\t" + "3\t");
+        ES.Cadena("   0\t" + "  1\t"  + " 2\t" + "3\t\n");
      
         for (Stack[] posicion : montonInterior) {// Recorremos posiciones de montón Interior
    
