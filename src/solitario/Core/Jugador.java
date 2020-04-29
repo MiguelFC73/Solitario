@@ -24,7 +24,36 @@ public class Jugador {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
+
+    //Selecciona una posición del monton interior.
+    private static int[] seleccionarPosicion() {
+        int[] posicion = {-1, -1};
+        do {
+            posicion[0] = ES.pideNumero("[*]Selecciona la fila deseada [0-3]: ");
+        } while (posicion[0] < 0 || posicion[0] > 3);
+        do {
+            posicion[1] = ES.pideNumero("[*]Selecciona la columna deseada [0-3]: ");
+        } while (posicion[1] < 0 || posicion[1] > 3);
+        return posicion;
+
+    }
+
+    //Selecciona la carta que vamos a mover.
+    public static int[] seleccionarCarta() {
+        if (true) {
+
+        }
+        System.out.println("[?] Qué carta quieres mover del montón interior?");
+        return seleccionarPosicion();
+
+    }
+
+    //Selecciona el destino de la carta seleccionada.
+    public static int[] seleccionarDestino() {
+        System.out.println("[?] Indica la posición de destino de tu carta");
+        return seleccionarPosicion();
+    }
+
     //Mueve una carta de un stack a otro del monton interior
     //La carta que se oculta en el stack destino tiene que ser 1 unidad > y del mismo palo que la que se mueve
     //Encima de un 10 tiene que colocarse un 7
@@ -62,7 +91,6 @@ public class Jugador {
         // Una vez listas las comprobaciones podremos mover la carta
         Mesa.montonInterior[filaDest][colDest].push(Mesa.montonInterior[filaOri][colOri].pop()); // Movemos a la posicion de destino la carta situada en posicion origen
 
-       
     }
 
     //Colocar carta en un monton exterior
@@ -85,24 +113,23 @@ public class Jugador {
         int montonDest = cartaOri.getPalo().ordinal();
 
         //Comprobación de que la primera carta escogida para mover sea un AS
-        if (Mesa.montonExterior[montonDest].empty()){
-            if(cartaOri.getNumero() != 1){
+        if (Mesa.montonExterior[montonDest].empty()) {
+            if (cartaOri.getNumero() != 1) {
                 throw new Exception("Movimiento inválido : Si un montón de un palo está vacío la primera carta a poner debe ser un as");
             }
-        }else{
+        } else {
 
-        //Vemos que carta vamos a solapar
-        Carta cartaDest = Mesa.montonExterior[montonDest].peek();
+            //Vemos que carta vamos a solapar
+            Carta cartaDest = Mesa.montonExterior[montonDest].peek();
 
-        //Comprobar cartaOri sea una unidad mayor sobre la carta a solapar.
-        if ((cartaOri.getNumero() == 10 && cartaDest.getNumero() != 7)
-                || (cartaOri.getNumero() != 10 && cartaOri.getNumero() - 1 != cartaDest.getNumero()) ){
-            throw new Exception("Movimiento inválido :La carta de destino no es una unidad menor que la de origen");
-        }
+            //Comprobar cartaOri sea una unidad mayor sobre la carta a solapar.
+            if ((cartaOri.getNumero() == 10 && cartaDest.getNumero() != 7)
+                    || (cartaOri.getNumero() != 10 && cartaOri.getNumero() - 1 != cartaDest.getNumero())) {
+                throw new Exception("Movimiento inválido :La carta de destino no es una unidad menor que la de origen");
+            }
         }
         //Una vez listas las comprobaciones movemos la carta al montón exterior
         Mesa.montonExterior[montonDest].push(Mesa.montonInterior[filaOri][colOri].pop());
 
-    
     }
 }
