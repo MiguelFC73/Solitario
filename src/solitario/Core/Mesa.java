@@ -27,8 +27,8 @@ import solitario.IU.ES;
 
 public class Mesa {
 
-    private final Stack<Carta>[] montonExterior; // 4 montones ( los 4 palos) 
-    private final Stack<Carta>[][] montonInterior;  // Una matriz
+     public static Stack<Carta>[] montonExterior; // 4 montones ( los 4 palos) 
+     public static Stack<Carta>[][] montonInterior;  // Una matriz
 
     public Mesa() {
         //Inicializa el monton exterior
