@@ -22,11 +22,12 @@ clase para representar la mesa de juego, y en particular de los métodos que se 
         // Produce: Introduce la Carta en el tope de la pila.
  */
 package solitario.Core;
-
 import java.util.Stack;
-import solitario.IU.ES;
 
-
+/**
+ *
+ * @author AEDI
+ */
 public class Mesa {
 
     public static Stack<Carta>[] montonExterior; // 4 montones ( los 4 palos) 
@@ -76,15 +77,13 @@ public class Mesa {
         }
     }
 
-
-
     //Muestra por pantalla las cartas que hay visibles en la mesa
     public void mostrarMesa() {
         // Creamos una representación para carta inexistente
         String cartaInexistente = "[--|-]";
 
         // Mostramos la última carta de los montones exteriores     
-        ES.Cadena("Montón Exterior:\n");
+        System.out.println("Montón Exterior:\n");
         for (Stack<Carta> monton : montonExterior) {// Recorremos los palos
             if (monton.empty()) { // Si un montón está vacio , se muestra representación por defecto carta inexistente
                 System.out.print(cartaInexistente);
@@ -95,7 +94,7 @@ public class Mesa {
         }
 
         // Mostramos la última carta de los montones exteriores     
-        ES.Cadena("\n\nMontón Interior:\n");
+        System.out.println("\n\nMontón Interior:\n");
         for (Stack[] posicion : montonInterior) {// Recorremos posiciones de montón Interior
             for (Stack<Carta> monton : posicion) { // Accedemos a las cartas de cada posición
                 if (monton.empty()) {
@@ -119,6 +118,84 @@ public class Mesa {
             }
         }
         return flag;
+    }
+
+
+    
+    public boolean movPosibles() {
+        boolean movimientos = false;
+        int a = 0;//i
+        int b = 0;//j
+        int c = 0; //k
+        int d = 0;//l
+
+        Carta x = montonInterior[a][b].peek();
+        Carta comp = montonInterior[a][b].peek();
+
+        for (a = 0; a < montonInterior.length && !movimientos; a++) { // Recorre fila
+            for (b = 0; b < montonInterior[a].length && !movimientos; b++) { //Recorre columna de fila actual
+                for (c = 0; c < 5 && !movimientos; c++) {
+                    for (d = 0; d < 4 && !movimientos; d++) {
+                        //Verificacion de Movimientos interiores
+                        if (c != 4) {
+                            //Se ignora la misma posicion y si alguna de ambas esta vacia
+                            if ((a != c || b != d) && (!montonInterior[a][b].empty() && !montonInterior[c][d].empty())) {
+                                //Si son del mismo palo
+                                if (montonInterior[a][b].peek().getPalo() == montonInterior[c][d].peek().getPalo()) {
+                                    //Si son contiguas
+                                    if ((montonInterior[a][b].peek().getNumero() == 7 && montonInterior[c][d].peek().getNumero() == 10)
+                                            || (montonInterior[c][d].peek().getNumero() - montonInterior[a][b].peek().getNumero() == 1)) {
+                                        movimientos = true;
+                                        //Si no son contiguas
+                                    } else {
+                                        //Se comprueba si se pueden mover varias cartas apiladas
+                                        Stack<Carta> carta1 = new Stack<Carta>();
+                                        Stack<Carta> carta2 = new Stack<Carta>();
+                                        carta1.push(montonInterior[a][b].pop());
+                                        while (!(montonInterior[a][b].empty()) && ((carta1.peek().getNumero() == 7 && montonInterior[a][b].peek().getNumero() == 10)
+                                                || (montonInterior[a][b].peek().getNumero() - carta1.peek().getNumero() == 1))
+                                                && (montonInterior[a][b].peek().getPalo() == carta1.peek().getPalo())) {
+
+                                            carta1.push(montonInterior[a][b].pop());
+                                        }
+                                        if ((carta1.peek().getNumero() == 7 && montonInterior[c][d].peek().getNumero() == 10)
+                                                || (montonInterior[c][d].peek().getNumero() - carta1.peek().getNumero() == 1)) {
+                                            movimientos = true;
+                                        }
+                                        while (!carta1.empty()) {
+                                            montonInterior[a][b].push(carta1.pop());
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                        
+                         
+                        //Verificacion de Movimientos exteriores
+                        else{
+                            //Se ignora la misma posicion y si la del monton interior esta vacia
+                            if(!montonInterior[a][b].empty()){
+                                //Si el monton exterior esta vacio
+                                if(montonExterior[d].empty()){
+                                    //Si el primer elemento del monton interior es igual a uno
+                                    if(montonInterior[a][b].peek().getNumero()==1)
+                                        movimientos=true;
+                                //si el monton exterior no esta vacio
+                                }else{
+                                //Si son del mismo palo
+                                    if(montonInterior[a][b].peek().getPalo()==montonExterior[d].peek().getPalo()){
+                                        //Si son contiguas
+                                        if((montonInterior[a][b].peek().getNumero() == 10 && montonExterior[d].peek().getNumero() == 7)  
+                                            || (montonInterior[a][b].peek().getNumero() - montonExterior[d].peek().getNumero() == 1)){
+                                            movimientos=true;
+                                        }
+                    }
+
+                }
+            }
+        }
+        return movimientos;
     }
     
     
